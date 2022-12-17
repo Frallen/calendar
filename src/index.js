@@ -48,8 +48,8 @@ let fillTasks = async () => {
   //создание верстки для недели
   let createWeekTemplate = () => {
     document.querySelector(".table-header").insertAdjacentHTML(
-        "beforeend",
-        `<div class="table-header-item">
+      "beforeend",
+      `<div class="table-header-item">
         </div>`
     );
     days.forEach((p) => {
@@ -115,9 +115,7 @@ let fillTasks = async () => {
         document.querySelectorAll(".table-workers-item").forEach((z) => {
           z.insertAdjacentHTML(
             "beforeend",
-            `<div class="date" data-today="${p}">
-      
-        </div>`
+            `<div class="date" data-today="${p}"></div>`
           );
         });
       });
@@ -163,16 +161,20 @@ let fillTasks = async () => {
           e.preventDefault();
           const dragable = document.querySelector(".dragging");
           console.log(
-            p.parentElement.querySelector(
+            e.currentTarget.parentElement.querySelector(
               `[data-today='${dragable.dataset.info}']`
             )
           );
-          p.parentElement.querySelector(
-            `[data-today='${dragable.dataset.info}']`
-          ) &&
-            p.parentElement
+
+          if (
+            e.currentTarget.parentElement.querySelector(
+              `[data-today='${dragable.dataset.info}']`
+            )
+          ) {
+            e.currentTarget.parentElement
               .querySelector(`[data-today='${dragable.dataset.info}']`)
               .appendChild(dragable);
+          }
         });
       });
       // вставка задач в ячейки если есть исполнитель
@@ -221,4 +223,4 @@ let fillTasks = async () => {
   };
   create();
 };
-fillTasks();
+fillTasks().then(p=>document.querySelector(".preloader").classList.add("hide")).catch(e=>console.error(e));

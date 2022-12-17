@@ -132,6 +132,7 @@ h5 {
     }
     &-search {
       outline: none;
+      border: 1px solid #becad6;
       .br(10px);
       width: 100%;
       padding: 10px;
@@ -148,6 +149,7 @@ h5 {
       justify-content: space-between;
       border: 1px solid @gray;
       padding: 5px;
+      position: relative;
       @media @lg {
         flex-direction: column;
       }
@@ -206,5 +208,26 @@ h5 {
 }
 .dragging {
   opacity: 0.5;
+  .trs();
+}
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  img {
+    display: block;
+    margin: auto;
+  }
+}
+.hide{
+  z-index: -1;
+  opacity: 0;
   .trs();
 }
