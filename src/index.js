@@ -29,17 +29,22 @@ let getTasks = async () => {
 };
 
 let fillTasks = async () => {
-  let currentDate = moment();
-
-  let weekStart = currentDate.clone().startOf("isoWeek");
-  //var weekEnd = currentDate.clone().endOf('isoWeek');
+  //текущая неделя
+  let weekStart = moment().clone().startOf("isoWeek");
+  //предыдущая неделя
+  let prevWeek = moment().subtract(1, "weeks").startOf("isoWeek");
+  //следующая неделя
+  let nextWeek = moment().add(1, "weeks").startOf("isoWeek");
 
   let days = [];
+  let createWeek = (week) => {
+    days = [];
+    for (let i = 0; i <= 6; i++) {
+      days.push(moment(week).add(i, "days").format("YYYY-MM-DD"));
+    }
+  };
+  createWeek(weekStart);
 
-  for (let i = 0; i <= 6; i++) {
-    days.push(moment(weekStart).add(i, "days").format("DD"));
-  }
-  console.log(days);
   days.forEach((p) => {
     document.querySelector(".table-header").insertAdjacentHTML(
       "beforeend",
@@ -53,15 +58,7 @@ let fillTasks = async () => {
   let users = await getUsers();
   console.log(tasks);
   console.log(users);
-  let count = 7 * users.length - 1;
-
-  /* for (let i = 0; i <= count; i++) {
-    document.querySelector(".table-body").insertAdjacentHTML(
-      "beforeend",
-      `<div class="table-body-item">
-        </div>`
-    );
-  }*/
+let create=()=>{
   if (users.length) {
     users.forEach((p) => {
       document.querySelector(".table-workers").insertAdjacentHTML(
@@ -75,25 +72,24 @@ let fillTasks = async () => {
       );
     });
     days.forEach((p) => {
-      document.querySelectorAll(".table-workers-item").forEach(z=>
-      {z.
-        insertAdjacentHTML(
-            "beforeend",
-            `<div class="date" data-today=" ${p}">
+      document.querySelectorAll(".table-workers-item").forEach((z) => {
+        z.insertAdjacentHTML(
+          "beforeend",
+          `<div class="date" data-today="${p}">
       
         </div>`
-        )
-      })
+        );
+      });
     });
   }
 
   if (tasks.length) {
     // заполнение данными
-    let executor = tasks.filter((p) => !p.executor);
-    executor.forEach((p) => {
+    let NonExecutor = tasks.filter((p) => !p.executor);
+    NonExecutor.forEach((p) => {
       document.querySelector(".task-wrapper").insertAdjacentHTML(
         "beforeend",
-        `<div class="task-item" data-id="${p.executor}" draggable="true">
+        `<div class="task-item" data-info="${p.planStartDate}" draggable="true">
         <h5 class="task-item-title">${p.subject}</h5> 
         <div class="task-item-dates">
         <div class="task-item-date start-date">${p.planStartDate}</div>
@@ -102,6 +98,7 @@ let fillTasks = async () => {
         </div>`
       );
     });
+    //Накиюдываю класс на перетаскивыемый элемент
     document.querySelectorAll(".task-item").forEach((p) => {
       p.addEventListener("dragstart", () => {
         p.classList.add("dragging");
@@ -111,12 +108,56 @@ let fillTasks = async () => {
         p.classList.remove("dragging");
       });
     });
+    //вставка в ячейку при перетаскивании в ячейку
     document.querySelectorAll(".table-workers-item .date").forEach((p) => {
       p.addEventListener("dragover", (e) => {
         e.preventDefault();
         const dragable = document.querySelector(".dragging");
         p.appendChild(dragable);
       });
+    });
+
+    // Перетаскивание на человека
+    document.querySelectorAll(".table-workers-item").forEach((p) => {
+      p.querySelector(".name").addEventListener("dragover", (e) => {
+        e.preventDefault();
+        const dragable = document.querySelector(".dragging");
+        console.log(
+          p.parentElement.querySelector(
+            `[data-today='${dragable.dataset.info}']`
+          )
+        );
+        p.parentElement.querySelector(
+          `[data-today='${dragable.dataset.info}']`
+        ) &&
+          p.parentElement
+            .querySelector(`[data-today='${dragable.dataset.info}']`)
+            .appendChild(dragable);
+      });
+    });
+    // вставка задач в ячейки если есть исполнитель
+    let Executor = tasks.filter((p) => p.executor);
+    Executor.forEach((p) => {
+      let cell = document
+        .getElementById(`${p.executor}`)
+        .querySelector(`[data-today='${p.planStartDate}']`);
+      if (cell) {
+        cell.insertAdjacentHTML(
+          "beforeend",
+          `<div class="task-item" data-info="${p.planStartDate}" draggable="true">
+        <h5 class="task-item-title">${p.subject}</h5> 
+        <div class="task-item-dates">
+        <div class="task-item-date start-date">${p.planStartDate}</div>
+        <div class="task-item-date end-date">${p.planEndDate}</div>
+        </div>
+        </div>`
+        );
+      }
+      /* console.log(
+        document
+          .getElementById(`${p.executor}`)
+          .querySelector(`[data-today='${p.planStartDate}']`)
+      );*/
     });
 
     /// поиск
@@ -136,6 +177,7 @@ let fillTasks = async () => {
         "beforeend",
         `<div class="task-item"><h6>Список задач пуст</h6></div>`
       );
-  }
+  }}
+  create()
 };
 fillTasks();

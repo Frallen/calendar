@@ -1,14 +1,16 @@
 @import "_mixnins";
 @import "_var";
-
+html {
+  font-size: 16px;
+}
 body {
   font-family: "Roboto", sans-serif;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
 
-  @media @lg{
-    overflow-x:scroll;
+  @media @lg {
+    overflow-x: scroll;
   }
 }
 
@@ -23,111 +25,104 @@ h5 {
 }
 .wrapper {
   display: flex;
-  justify-content: space-between;  position: relative;
-  @media @lg{
+  justify-content: space-between;
+  position: relative;
+  @media @lg {
     min-width: 224vw;
   }
   .table {
     display: flex;
     flex-direction: column;
     width: 70%;
-    @media @lg{
+    @media @lg {
       width: 100%;
     }
     &-workers {
-
-      margin-top: 2.5em;
-
-      &-item {     display: flex;align-items: center;
-
+      &-item {
+        display: flex;
+        align-items: center;
         word-break: break-word;
         height: 100px;
         .border();
         .name {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
           span {
             display: block;
           }
         }
-        .date{
+        .date {
           text-align: center;
           .border();
-          padding: 10px;
           content: "";
-
           height: 100px;
           position: relative;
           .task-item {
-          flex-direction: column;
-          .trs();
-
-        }
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+            .trs();
+            background: @orange;
+            height: 100%;
+          }
           .task-item-dates {
-            height: 0;
-            opacity: 0;.trs();
+            position: absolute;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            background: @orange;
+            opacity: 0;
+            .trs();
           }
         }
         .date:hover {
-
           .task-item {
             flex-direction: column;
-            .trs() ;
+            .trs();
             .task-item-dates {
               opacity: 1;
               height: 100%;
-              width: 100%;.trs();
+              width: 100%;
+              .trs();
             }
           }
         }
-        .date,.name{
+        .date,
+        .name {
           width: calc(100% / 8);
         }
       }
     }
 
-      .table-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        &-item {
-          text-align: center;
-          padding: 10px;
-          .border();
-          flex: 1 0 auto;
-        }
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &-item {
+        text-align: center;
+        padding: 10px;
+        width: calc(100% / 8);
+        height: 42px;
+        .border();
+        flex: 1 0 auto;
       }
-     /* .table-body {
-        display: flex;
-        flex-wrap: wrap;
-
-        &-item {
-
-
-        }
-        &-item:hover {
-
-           .task-item {
-               flex-direction: column;
-               .trs() ;
-               .task-item-dates {
-                 opacity: 1;
-                 height: 100%;
-                 width: 100%;.trs();
-               }
-             }
-        }
-      }*/
+    }
   }
   .task {
     padding: 10px;
-    .br(10px);
     overflow: hidden;
     border: 1px solid @gray;
     height: fit-content;
     width: 30%;
     position: fixed;
-    top:0;
+    top: 0;
     right: 0;
-    @media @lg{
+    @media @lg {
       display: none;
     }
     h3 {
@@ -151,10 +146,13 @@ h5 {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      border: 1px solid @gray;
+      padding: 5px;
       @media @lg {
         flex-direction: column;
       }
       h5 {
+        font-size: 1.2em;
       }
       &-dates {
         display: flex;
@@ -174,6 +172,26 @@ h5 {
     &-item:first-child {
       margin-top: 0;
     }
+  }
+}
+.nav {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  &-next,
+  &-prev {
+    outline: none;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    font-size: 1em;
+    display: block;
+    cursor: pointer;
+    background: @blue;
+    color: #fff;
+    .br(10px);
   }
 }
 .collapse {
