@@ -152,7 +152,7 @@ h5 {
         flex-direction: column;
       }
       h5 {
-        font-size: 1.2em;
+        font-size: 1.1em;
       }
       &-dates {
         display: flex;
@@ -192,6 +192,12 @@ h5 {
     background: @blue;
     color: #fff;
     .br(10px);
+    .trs();
+  }
+  &-next:hover,
+  &-prev:hover {
+    .trs();
+    box-shadow: 0 0 10px 0 @blue;
   }
 }
 .collapse {
