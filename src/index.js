@@ -168,6 +168,8 @@ let fillTasks = async () => {
             e.currentTarget.parentElement
               .querySelector(`[data-today='${dragable.dataset.info}']`)
               .appendChild(dragable);
+          }else{
+            e.currentTarget.parentElement.querySelectorAll(".date")[1].appendChild(dragable);
           }
         });
       });
