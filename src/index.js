@@ -1,5 +1,3 @@
-import "modern-normalize/modern-normalize.css";
-import "./style.less";
 import axios from "axios";
 import moment from "moment";
 let getUsers = async () => {
@@ -41,7 +39,7 @@ let fillTasks = async () => {
   let createWeek = (week) => {
     days = [];
     for (let i = 0; i <= 6; i++) {
-      days.push(moment(week).add(i, "days").format("YYYY-MM-DD"));
+      days.push(moment(week).add(i, "days").format("DD"));
     }
   };
 
@@ -127,7 +125,9 @@ let fillTasks = async () => {
       NonExecutor.forEach((p) => {
         document.querySelector(".task-wrapper").insertAdjacentHTML(
           "beforeend",
-          `<div class="task-item" data-info="${p.planStartDate}" draggable="true">
+          `<div class="task-item" data-info="${moment(p.planStartDate).format(
+            "DD"
+          )}" draggable="true">
         <h5 class="task-item-title">${p.subject}</h5> 
         <div class="task-item-dates">
         <div class="task-item-date start-date">${p.planStartDate}</div>
@@ -204,7 +204,8 @@ let fillTasks = async () => {
 
       /// поиск
       document.querySelector(".task-search").addEventListener("input", (e) => {
-        document.querySelectorAll(".task-item").forEach((p) => {
+        document.querySelectorAll(".task-wrapper .task-item").forEach((p) => {
+          console.log(p);
           if (!p.textContent.toLowerCase().includes(e.currentTarget.value)) {
             p.classList.add("collapse");
           } else {
@@ -212,6 +213,7 @@ let fillTasks = async () => {
           }
         });
       });
+     // document.querySelectorAll(".date .task-item").forEach(p=>p.addEventListener("mouseover",(e)=>e.stopPropagation()))
     } else {
       document
         .querySelector(".task-wrapper")
@@ -223,4 +225,6 @@ let fillTasks = async () => {
   };
   create();
 };
-fillTasks().then(p=>document.querySelector(".preloader").classList.add("hide")).catch(e=>console.error(e));
+fillTasks()
+  .then((p) => document.querySelector(".preloader").classList.add("hide"))
+  .catch((e) => console.error(e));
