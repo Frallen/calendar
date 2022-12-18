@@ -33,7 +33,7 @@ let fillTasks = async () => {
   let prevWeek = moment().subtract(1, "weeks").startOf("isoWeek");
   //следующая неделя
   let nextWeek = moment().add(1, "weeks").startOf("isoWeek");
-
+  //дни недели
   let days = [];
   // создание недели
   let createWeek = (week) => {
@@ -63,29 +63,23 @@ let fillTasks = async () => {
   createWeekTemplate();
   //экшен след. недели
   document.querySelector(".nav-next").addEventListener("click", (e) => {
-    clear();
-    if (e.currentTarget.parentElement.classList.contains("go")) {
-      e.currentTarget.parentElement.classList.remove("go");
-      createWeek(weekStart);
-    } else {
-      e.currentTarget.parentElement.classList.add("go");
-      createWeek(nextWeek);
-    }
-    createWeekTemplate();
-    create();
+    move(e, nextWeek);
   }); //экшен пред. недели
   document.querySelector(".nav-prev").addEventListener("click", (e) => {
+    move(e, prevWeek);
+  });
+  let move = (e, week) => {
     clear();
     if (e.currentTarget.parentElement.classList.contains("go")) {
       e.currentTarget.parentElement.classList.remove("go");
       createWeek(weekStart);
     } else {
       e.currentTarget.parentElement.classList.add("go");
-      createWeek(prevWeek);
+      createWeek(week);
     }
     createWeekTemplate();
     create();
-  });
+  };
   let clear = () => {
     document.querySelectorAll(".task-item").forEach((p) => p.remove());
     document.querySelectorAll(".table-workers-item").forEach((p) => p.remove());
@@ -160,11 +154,11 @@ let fillTasks = async () => {
         p.querySelector(".name").addEventListener("dragover", (e) => {
           e.preventDefault();
           const dragable = document.querySelector(".dragging");
-          console.log(
+        /*  console.log(
             e.currentTarget.parentElement.querySelector(
               `[data-today='${dragable.dataset.info}']`
             )
-          );
+          );*/
 
           if (
             e.currentTarget.parentElement.querySelector(
@@ -182,7 +176,7 @@ let fillTasks = async () => {
       Executor.forEach((p) => {
         let cell = document
           .getElementById(`${p.executor}`)
-          .querySelector(`[data-today='${p.planStartDate}']`);
+          .querySelector(`[data-today='${moment(p.planStartDate).format("DD")}']`);
         if (cell) {
           cell.insertAdjacentHTML(
             "beforeend",
@@ -213,7 +207,6 @@ let fillTasks = async () => {
           }
         });
       });
-     // document.querySelectorAll(".date .task-item").forEach(p=>p.addEventListener("mouseover",(e)=>e.stopPropagation()))
     } else {
       document
         .querySelector(".task-wrapper")
